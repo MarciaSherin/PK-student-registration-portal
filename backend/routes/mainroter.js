@@ -1,20 +1,27 @@
 const express = require('express');;
 const router = express.Router(); 
-const con=require("../db");
+const pool=require("../db");    
 
 
-router.post("/basic",async(req,res)=>{
-    const {blood_grp,course,dagree,dob,gender,hsc_medium,name,studentmob_no,student_aadhar,student_email,yearofadmission}=req.body;
-    const sql="INSERT INTO student_details(blood_grp,course,dagree,dob,gender,hsc_medium,name,studentmob_no,student_aadhar,student_email,yearofadmission) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+router.post("/basic",async(req,res,next)=>{
+    
+    try{const {blood_grp,course,dagree,dob,gender,hsc_medium,name,studentmob_no,student_aadhar,student_email,yearofadmission}=req.body;
+    const sql="INSERT INTO basic(blood_grp,course,degree,dob,gender,hsc_medium,name,studentmob_no,student_aadhar,student_email,yearofadmission) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
     const values=[blood_grp,course,dagree,dob,gender,hsc_medium,name,studentmob_no,student_aadhar,student_email,yearofadmission];
-    const result=await con.query(sql,values);
+    const result=await pool.query(sql,values);
     res.status(200).json({
-        message:"Student details added successfully",
-        body:req.body
-    })
+        message:"Student details added successfully"
+    })}
+    catch(err){
+        console.log("error adding student details",err);
+        res.status(500).json({
+            msg:"Error adding student details",
+        })
+    }
 })
 
-router.
+
+
 module.exports=router;
 
 
